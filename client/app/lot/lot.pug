@@ -1,0 +1,212 @@
+.container
+  .col-md-12
+    h1 {{ lotctrl.lot.full_lot_name }}
+    .col-md-12(ng-show='!lotctrl.isLoggedIn')
+      label.col-md-offset-2 (Please log in to place bids or watch this lot)
+    .col-md-12(ng-show='lotctrl.isLoggedIn')
+      .col-md-4
+        label.col-md-5.control-label Current Bid:
+        .col-md-7
+          input#currBid.form-control(type='number' ng-model="lotctrl.lot.current_bid" ng-readonly="lotctrl.readonly")
+          | {{lotctrl.lot.pricing_unit}}
+      button.btn.btn-primary(ng-click="lotctrl.makeBid()") Make Bid
+      button.col-md-offset-1.btn.btn-primary(ng-click="lotctrl.showMessageForm=true") Email Agent
+      button.col-md-offset-1.btn.btn-primary(ng-click="lotctrl.watchLot()") Watch this Lot
+      .spacer10
+      .form-group.col-md-12(ng-show="lotctrl.showBidForm")
+        label.col-md-3.control-label New Bid Amount:
+        .col-md-3
+          input#newBid.form-control(type='number' ng-model="lotctrl.lot.new_bid")
+        .col-md-4
+          div.checkbox(ng-show='!lotctrl.bidTerms')
+            label
+              input(type='checkbox', ng-model='lotctrl.bidTerms')
+              | Placing a bid is a binding contract
+          button.btn.btn-primary(ng-click="lotctrl.createBid(lotctrl.lot.new_bid)" ng-show='lotctrl.bidTerms') Place Bid
+      .form-group.col-md-12(ng-show="lotctrl.showMessageForm")
+        label.col-md-2.control-label Subject: {{ lotctrl.lot.lot_name }}
+        .col-md-6
+          textarea.form-control(type='text' ng-model="lotctrl.messageText")
+        button.btn.btn-primary(ng-click="lotctrl.messageSeller()") Send Message
+    .spacer10
+    form#lotForm.form-horizonal
+      input#lot_id(type='hidden' ng-value="_id")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Agent:
+          .col-md-9
+            input#agent_name.form-control(type='text' ng-model="lotctrl.lot.agent" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Lot Name:
+          .col-md-9
+            input#lot_name.form-control(type='text' ng-model="lotctrl.lot.lot_name" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Lot Type:
+          .col-md-9
+            input#lot_type.form-control(type='text' ng-model="lotctrl.lot.lot_type" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Quantity:
+          .col-md-9
+            input#quantity.form-control(type='text' ng-model="lotctrl.lot.quantity" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Category:
+          .col-md-9
+            input#category.form-control(type='text' ng-model="lotctrl.lot.category" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Description:
+          .col-md-9
+            textarea.form-control#description(ng-model="lotctrl.lot.desc" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label.col-md-3 Livestock Type:
+          .col-md-9
+            input#livestockType.form-control(type='text' ng-model="lotctrl.lot.livestock_type" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Marking:
+          .col-md-9
+            input#marking.form-control(type='text' ng-model="lotctrl.lot.marking" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Avg Weight:
+          .col-md-9
+            input#avg_weight.form-control(type='text' ng-model="lotctrl.lot.avg_weight" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Paint Mark:
+          .col-md-9
+            input#paint_mark.form-control(type='text' ng-model="lotctrl.lot.paint_mark" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Top Weight:
+          .col-md-9
+            input#top_weight.form-control(type='text' ng-model="lotctrl.lot.top_weight" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Status:
+          .col-md-9
+            input#status.form-control(type='text' ng-model="lotctrl.lot.status" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Bottom Weight:
+          .col-md-9
+            input#bottom_weight.form-control(type='text' ng-model="lotctrl.lot.bottom_weight" ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Payment Info:
+          .col-md-9
+            textarea#payment_info.form-control(rows='5' ng-model="lotctrl.lot.payment_info" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-12.control-label  Teeth
+          .row
+            label.col-md-2.col-md-offset-1 MT
+            .col-md-4
+              input.form-control(type='number' ng-model='lotctrl.lot.teeth.mt' ng-readonly="lotctrl.readonly")
+          .row
+            label.col-md-2.col-md-offset-1 2T
+            .col-md-4
+              input.form-control(type='number' ng-model='lotctrl.lot.teeth.twot' ng-readonly="lotctrl.readonly")
+          .row
+            label.col-md-2.col-md-offset-1 4T
+            .col-md-4
+              input.form-control(type='number' ng-model='lotctrl.lot.teeth.fourt' ng-readonly="lotctrl.readonly")
+          .row
+            label.col-md-2.col-md-offset-1 6T
+            .col-md-4
+              input.form-control(type='number' ng-model='lotctrl.lot.teeth.sixt' ng-readonly="lotctrl.readonly")
+          .row
+            label.col-md-2.col-md-offset-1 FM
+            .col-md-4
+              input.form-control(type='number' ng-model='lotctrl.lot.teeth.fm' ng-readonly="lotctrl.readonly")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Close Date:
+          .col-md-9
+            input#close_date.form-control(type='text' ng-bind="lotctrl.lot.close_date | date:'MM/dd/yyyy'" ng-readonly="lotctrl.readonly")
+        .form-group.col-md-6
+          label.col-md-3.control-label Pricing Unit:
+          .col-md-9
+            input#pricing_unit.form-control(type='text' ng-model="lotctrl.lot.pricing_unit" ng-readonly="lotctrl.readonly")
+      .row
+        h2 Photos of this lot
+        ul.col-md-4(ng-repeat="photo in lotctrl.lot.photos")
+          img.img-responsive(ng-src="{{photo.filename}}")
+          input(type='hidden' ng-model='photo.filename')
+
+    .col-md-12
+      .col-md-12
+        h2 Animals in this lot
+      .spacer10
+      .row
+        .col-md-12
+          ul.col-sm-4(ng-repeat="animal in lotctrl.lot.animals" ng-show="lotctrl.lot.animals")
+            .panel.panel-primary
+              .panel-heading
+                h3.panel-title Tag Number {{animal.tag_number}}
+              .panel-body
+                form.form-horizontal
+                  .form-group
+                    label.col-md-5.control-label Tag Number:
+                    .col-md-7
+                      input#tagNumber.form-control.input-sm(type='text' ng-model="animal.tag_number" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Class:
+                    .col-md-7
+                      input#class.form-control.input-sm(type='text' ng-model="animal.class" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Age class:
+                    .col-md-7
+                      input#age_class.form-control.input-sm(type='text' ng-model="animal.age_class" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Breed:
+                    .col-md-7
+                      input#breed.form-control.input-sm(type='text' ng-model="animal.breed" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Weight:
+                    .col-md-7
+                      input#weight.form-control.input-sm(type='text' ng-model="animal.weight" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Age (teeth):
+                    .col-md-7
+                      input#ageTeeth.form-control.input-sm(type='text' ng-model="animal.age_teeth" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Age (months):
+                    .col-md-7
+                      input#ageMonths.form-control.input-sm(type='text' ng-model="animal.age_months" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Grade:
+                    .col-md-7
+                      input#grade.form-control.input-sm(type='text' ng-model="animal.grade" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Min lactation:
+                    .col-md-7
+                      input#minLactation.form-control.input-sm(type='text' ng-model="animal.min_lactation" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Max lactation:
+                    .col-md-7
+                      input#maxLactation.form-control.input-sm(type='text' ng-model="animal.max_lactation" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label # of calves:
+                    .col-md-7
+                      input#numCalves.form-control.input-sm(type='text' ng-model="animal.num_calves" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Male calves:
+                    .col-md-7
+                      input#maleCalf.form-control.input-sm(type='text' ng-model="animal.male_calf" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Female calves:
+                    .col-md-7
+                      input#femaleCalf.form-control.input-sm(type='text' ng-model="animal.female_calf" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Dress %:
+                    .col-md-7
+                      input#dressPct.form-control.input-sm(type='text' ng-model="animal.dress_pct" ng-readonly="lotctrl.readonly")
+                  .form-group
+                    label.col-md-5.control-label Quantity:
+                    .col-md-7
+                      input#animalQuantity.form-control.input-sm(type='text' ng-model="animal.quantity" ng-readonly="lotctrl.readonly" )
+                  .form-group
+                    .col-md-4
+                      label.control-label Photo:
+                    .col-md-8
+                      img.img-responsive.imgPlaceholder(ng-src="{{animal.photo}}")
+

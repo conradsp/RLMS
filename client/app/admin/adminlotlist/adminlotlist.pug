@@ -1,0 +1,62 @@
+.container
+  .row
+    .col-md-6.col-md-offset-6
+      #custom-search-input
+        .input-group.col-md-12
+          input.form-control.input-sm(type="text" placeholder="Search..." ng-model="lotlist.searchCriteria")
+          span.input-group-btn
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-remove(ng-show="lotlist.searchCriteria" ng-click="lotlist.clearSearch()")
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-search(ng-click="lotlist.lotSearch(true)")
+  .col-md-12
+    .form-group.col-md-6
+      label.col-md-3.control-label Status:
+      .col-md-9
+        div.btn-group.dropdown-button(uib-dropdown dropdown-append-to-body)
+          button#dropLotType.btn.btn-default(type="button" uib-dropdown-toggle) {{lotlist.currStatus}}
+            span.caret
+          ul.dropdown-menu(uib-dropdown-menu)
+            li(ng-repeat="lotstat in lotlist.statusList")
+              a(href="#" ng-click="lotlist.setLotStat(lotstat)") {{lotstat}}
+  .col-md-12
+    h1 Lots
+    table.table.table-striped(st-table='lotlist.displayedLots' st-safe-src="lotlist.lots")
+      thead
+        tr
+          th(st-sort="lot_name" title="Sort by name") Lot name
+          th(st-sort="desc" title="Sort by description") Description
+          th Quantity
+          th(st-sort="category" title="Sort by category") Category
+          th(st-sort="seller" title="Sort by seller") Seller
+          th(st-sort="current_bid" title="Sort by seller") Seller
+          th(st-sort="close_date" title="Sort by close date") Close Date
+          th Status
+          th Actions
+      tbody(ng-show="!lotlist.isLoading")
+        tr(ng-repeat="row in lotlist.displayedLots")
+          td(ng-click="lotlist.showLot(row._id)") {{row.lot_name}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.desc}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.quantity}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.category}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.seller}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.current_bid | currency }}
+          td(ng-click="lotlist.showLot(row._id)") {{row.close_date | date:'MM/dd/yyyy'}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.status}}
+          td
+            button.btn.btn-sm.btn-success(type="button" ng-show="row.status=='Open'" ng-click="lotlist.closeLot(row)" confirm="Close this lot?" uib-tooltip="Close Lot")
+              i.glyphicon.glyphicon-check
+            button.btn.btn-sm.btn-success(type="button" ng-show="row.status=='Waiting'" ng-click="lotlist.openLot(row)" uib-tooltip="Approve Lot")
+              i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-success(type="button" ng-show="row.status=='Closed'" ng-click="lotlist.openLot(row)" uib-tooltip="Re-open Lot")
+                i.glyphicon.glyphicon-check
+            button.btn.btn-sm.btn-danger(type="button" uib-tooltip="Delete Lot" ng-click="lotlist.removeLot(row)" confirm="Delete this lot?")
+              i.glyphicon.glyphicon-remove-circle
+      tfoot
+        tr
+          td.text-center(st-pagination='' st-items-by-page='20' colspan='7')
+
+  .col-md-12
+    div
+      button.btn.btn-inverse.btn-lg.btn-register(ng-click='lotlist.addLot()')
+        | Add Lot

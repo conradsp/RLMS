@@ -1,0 +1,261 @@
+.container
+  .row
+    .col-sm-12
+      uib-tabset(active="active" type="pills")
+        uib-tab(index="0" heading="My Bids")
+          .spacer10
+          .col-sm-10.col-sm-offset-1
+            table.table.table-striped(st-safe-src='vm.lotsbidding' )
+              thead
+                tr
+                  th Lot name
+                  th Bid Amount
+                  th Close Date
+              tbody
+                tr(ng-repeat="row in vm.lotsbidding")
+                  td(ng-click="vm.showLot(row.lot_id)") {{row.lot_name}}
+                  td(ng-click="vm.showLot(row.lot_id)") {{row.bid_amount | currency}}
+                  td(ng-click="vm.showLot(row.lot_id)") {{row.close_date | date:'MM/dd/yyyy'}}
+
+        uib-tab(index="1" heading="Watching")
+          .spacer10
+          .col-sm-10.col-sm-offset-1
+            table.table.table-striped(st-safe-src='vm.lotswatching' )
+              thead
+                tr
+                  th Lot name
+                  th Close Date
+                  th Actions
+              tbody
+                tr(ng-repeat="row in vm.lotswatching")
+                  td(ng-click="vm.showLot(row.lot_id)") {{row.lot_name}}
+                  td(ng-click="vm.showLot(row.lot_id)") {{row.close_date | date:'MM/dd/yyyy'}}
+                  td
+                    button.btn.btn-sm.btn-danger(type="button" ng-click="vm.deleteWatch(row)" uib-tooltip="Delete Watch")
+                      i.glyphicon.glyphicon-remove-circle
+        uib-tab(index="2")
+          uib-tab-heading Messages&nbsp;
+            span.badge(ng-show='vm.messageCount') {{ vm.messageCount }}
+          .spacer10
+          .col-sm-10.col-sm-offset-1
+            table.table.table-striped(st-table='vm.mymessages')
+              thead
+                tr
+                  th From
+                  th Subject
+                  th Date
+                  th Status
+                  th Actions
+              tbody(ng-show="!vm.isLoading")
+                tr(ng-repeat-start="row in vm.mymessages" )
+                  td(ng-click="vm.showMessage(row)") {{row.username}}
+                  td(ng-click="vm.showMessage(row)") {{row.subject}}
+                  td(ng-click="vm.showMessage(row)") {{row.send_date | date:'MM/dd/yyyy'}}
+                  td(ng-click="vm.showMessage(row)") {{row.status}}
+                  td
+                    button.btn.btn-sm.btn-default(type="button" ng-click="vm.replyMessage(row)" uib-tooltip="Reply")
+                      i.glyphicon.glyphicon-arrow-left
+                    button.btn.btn-sm.btn-danger(type="button" ng-click="vm.deleteMessage(row)" uib-tooltip="Delete Message" confirm="Delete this message?")
+                      i.glyphicon.glyphicon-remove-circle
+                  div
+                tr(ng-if="row.expanded")
+                  td(colspan="4") {{row.message}}
+                tr(ng-show="row.reply" ng-repeat-end="")
+                  td(colspad="4")
+                    label.col-md-2.control-label Subject: {{ row.subject }}
+                    .col-md-6
+                      textarea.form-control(type='text' ng-model="vm.messageText")
+                    button.btn.btn-primary(ng-click="vm.sendReply(row)") Send Message
+              tfoot
+                tr
+                  td.text-center(st-pagination='' st-items-by-page='20' colspan='5')
+            button.btn.btn-primary(ng-click="vm.showMessageForm=true") Email Administrator
+            .spacer10
+            .form-group.col-md-12(ng-show="vm.showMessageForm")
+              label.col-md-2.control-label Subject: Message for administrator
+              .col-md-6
+                textarea.form-control(type='text' ng-model="vm.messageText")
+              button.btn.btn-primary(ng-click="vm.messageAdmin()") Send Message
+        uib-tab(index="3" heading="My Profile")
+          .spacer10
+          .col-sm-10.col-sm-offset-1
+            form.form(name='myprofile', ng-submit='vm.updateProfile(myprofile)', novalidate='')
+              .col-md-6
+                .row.form-group
+                  label.col-md-3 Username
+                  .col-md-9
+                    input.form-control(type='text', name='username', ng-model='vm.user.username', ng-readonly="true")
+                .row.form-group
+                  label.col-md-3 Full Name
+                  .col-md-9
+                    input.form-control(type='text', name='fullname', ng-model='vm.user.fullname', ng-readonly="true")
+                .row.form-group
+                  label.col-md-3 Email
+                  .col-md-9
+                    input.form-control(type='email', name='email', ng-model='vm.user.email', ng-readonly="true")
+                .row.form-group
+                  label.col-md-3 Land Line
+                  .col-md-9
+                    input.form-control(type='text', name='landline', ng-model='vm.user.landline')
+                .row.form-group
+                  label.col-md-3 Cell Number
+                  .col-md-9
+                    input.form-control(type='text', name='cellnumber', ng-model='vm.user.cellnumber')
+                    p.help-block(ng-show='form.cellnumber.$error.required && vm.submitted')
+                      | A cell number is required
+                .row.form-group
+                  label.col-md-3 ID Number
+                  .col-md-9
+                    input.form-control(type='text', name='idnumber', ng-model='vm.user.idnumber')
+                .row.form-group
+                  label.col-md-3 Passport Number
+                  .col-md-9
+                    input.form-control(type='text', name='passportnumber', ng-model='vm.user.passportnumber')
+                .row.form-group
+                  label.col-md-3 SMS Number
+                  .col-md-9
+                    input.form-control(type='text', name='smsnumber', ng-model='vm.user.smsnumber')
+                .row.form-group
+                  label.col-md-3 Tag Number
+                  .col-md-9
+                    input.form-control(type='text', name='tagnumber', ng-model='vm.user.tagnumber')
+                .row.form-group
+                  label.col-md-3 Budget
+                  div.col-md-9.dropdown(uib-dropdown)
+                    button#dropBudget.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{vm.user.budget || '3000-5000' }}
+                      | &nbsp;
+                      span.caret
+                    ul.dropdown-menu(uib-dropdown-menu)
+                      li(ng-repeat="budget in vm.budget")
+                        a(href="#" ng-click="vm.setBudget(budget)") {{budget}}
+
+              .col-md-6
+                .row.form-group
+                  label.col-md-3 Farm Name
+                  .col-md-9
+                    input.form-control(type='text', name='farmname', ng-model='vm.user.farmname')
+                .row.form-group
+                  label.col-md-3 Trading Name
+                  .col-md-9
+                    input.form-control(type='text', name='tradingname', ng-model='vm.user.tradingname')
+                .row.form-group
+                  label.col-md-3 Billing Address
+                  .col-md-9
+                    input.form-control(type='text', name='billingaddress', ng-model='vm.user.billingaddress')
+                .row.form-group
+                  label.col-md-3 Farm Address
+                  .col-md-9
+                    input.form-control(type='text', name='farmaddress', ng-model='vm.user.farmaddress')
+                .row.form-group
+                  label.col-md-3 District
+                  .col-md-9
+                    input.form-control(type='text', name='district', ng-model='vm.user.district')
+                .row.form-group
+                  label.col-md-3 Province
+                  .col-md-9
+                    input.form-control(type='text', name='province', ng-model='vm.user.province')
+                .row.form-group
+                  label.col-md-3 Brand
+                  div.col-md-9.dropdown(uib-dropdown)
+                    button#dropLotType.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{vm.user.brand || 'Yes' }}
+                      span.caret
+                    ul.dropdown-menu(uib-dropdown-menu)
+                      li
+                        a(href="#" ng-click="vm.setBrand(true)") Yes
+                      li
+                        a(href="#" ng-click="vm.setBrand(false)") No
+                .row.form-group
+                  label.col-md-3 Brand Description
+                  .col-md-9
+                    textarea.form-control(type='text', name='branddesc', ng-model='vm.user.branddesc')
+                .row.form-group
+                  label.col-md-3 Bank Name
+                  .col-md-9
+                    input.form-control(type='text', name='bankname', ng-model='vm.user.bankname')
+                .row.form-group
+                  label.col-md-3 Bank Info
+                  .col-md-9
+                    input.form-control(type='text', name='bankinfo', ng-model='vm.user.bankinfo')
+                .row.form-group
+                  label.col-md-3 Transport Info
+                  .col-md-9
+                    textarea.form-control(type='text', name='transportinfo', ng-model='vm.user.transportinfo')
+                .col-md-12
+                  // Do checkboxes for type and class
+                  .row.form-group
+                    label.col-md-3 Livestock Type
+                    .col-md-9
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-checked='vm.user.livestocktype.cattle', ng-model='vm.user.livestocktype.cattle')
+                        | Cattle
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestocktype.sheep')
+                        | Sheep
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestocktype.goats')
+                        | Goats
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestocktype.pigs')
+                        | Pigs
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestocktype.wildlife')
+                        | Wildlife
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestocktype.machinery')
+                        | Machinery
+                  .row.form-group
+                    label.col-md-3 Livestock Class
+                    .col-md-9
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestockclass.breeding')
+                        | Breeding
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestockclass.feeding')
+                        | Feeding
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestockclass.slaughter')
+                        | Slaughter
+                      label.checkbox-inline
+                        input(type='checkbox', name='typecattle', ng-model='vm.user.livestockclass.youngstock')
+                        | Youngstock
+                  .row
+                    p.help-block  {{ vm.message }}
+
+              button.btn.btn-lg.btn-primary(type='submit') Save changes
+
+        uib-tab(index="4" heading="Change Password")
+          .spacer10
+          .col-sm-6.col-sm-offset-1
+            form.form(name='form', ng-submit='vm.changePassword(form)', novalidate='')
+              .row.form-group
+                label.col-md-4 Current Password
+                .col-md-8
+                  input.form-control(type='password'
+                  name='password'
+                  ng-model='vm.user.oldPassword'
+                  mongoose-error='')
+                  p.help-block(ng-show='form.password.$error.mongoose')
+                    | {{ vm.errors.other }}
+              .row.form-group
+                label.col-md-4 New Password
+                .col-md-8
+                  input.form-control(type='password'
+                  name='newPassword'
+                  ng-model='vm.user.newPassword'
+                  ng-minlength='3', required='')
+                  p.help-block(ng-show='(form.newPassword.$error.minlength || form.newPassword.$error.required) && (form.newPassword.$dirty || vm.submitted)')
+                    | Password must be at least 3 characters.
+              .row.form-group
+                label.col-md-4 Confirm New Password
+                .col-md-8
+                  input.form-control(type='password'
+                  name='confirmPassword'
+                  ng-model='vm.user.confirmPassword'
+                  match="vm.user.newPassword"
+                  ng-minlength='3', required='')
+                  p.help-block(ng-show='fvm.orm.confirmPassword.$error.match && vm.submitted')
+                    | Passwords must match.
+              .row
+              p.help-block  {{ vm.message }}
+
+              button.btn.btn-lg.btn-primary(type='submit') Save changes

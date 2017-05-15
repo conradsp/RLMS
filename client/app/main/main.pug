@@ -1,0 +1,36 @@
+.container
+  .row
+    .col-md-6.col-md-offset-6
+      #custom-search-input
+        .input-group.col-md-12
+          input.form-control.input-sm(type="text" placeholder="Search..." ng-model="main.searchCriteria")
+          span.input-group-btn
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-remove(ng-show="main.searchCriteria" ng-click="main.clearSearch()")
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-search(ng-click="main.lotSearch()")
+  .spacer10
+  .row
+    div.carouseldiv
+      div(uib-carousel active="active" interval="5000" no-wrap="noWrapSlides")
+        div(uib-slide ng-repeat="content in main.contents track by content.id" index="content.id")
+          img(ng-src="{{content.image}}" style="margin:auto;max-height:325px;")
+          div.carousel-caption
+            h4 {{content.short_desc}}
+            p {{content.long_desc}}
+            button.btn.btn-default(ng-click='main.redirect(content.html)') Learn More
+
+  .row
+    h1.page-header {{ main.lotLabel }}
+    .col-md-12
+      ul.col-md-4(ng-repeat="product in main.lots")
+        div(style="height:140px;")
+          img(ng-click='main.showLot(product._id)' ng-src='{{product.photos[0].filename}}' width='167px' style='max-height:140px;')
+        .col-md-12
+          h4(ng-click='main.showLot(product._id)') {{product.full_lot_name}}
+          span.pr-number Quantity: {{product.quantity }}
+          div(style="height:90px")
+            p {{product.desc}}
+          p Current Bid: {{product.current_bid | currency }}
+          button.btn.btn-default(ng-click='main.showLot(product._id)') View More
+

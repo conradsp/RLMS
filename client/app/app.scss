@@ -1,0 +1,116 @@
+$icon-font-path: '/assets/fonts/bootstrap/';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+$fa-font-path: '/assets/fonts/font-awesome/';
+@import '~font-awesome/scss/font-awesome';
+
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,900|Roboto:300,500,700,900);
+
+/**
+ * App-wide Styles
+ */
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+
+/**
+ * App-wide Styles
+ */
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+.st-sort-ascent:before{
+  content: '\25B2';
+}
+
+.st-sort-descent:before{
+  content: '\25BC';
+}
+
+.table th {
+  cursor: pointer;
+}
+
+.spacer10 {
+  width: 100%;
+  min-height: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
+  position: relative;
+}
+
+#custom-search-input{
+  padding: 3px;
+  border: solid 1px #E4E4E4;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+#custom-search-input input{
+  border: 0;
+  box-shadow: none;
+}
+
+#custom-search-input button{
+  margin: 2px 0 0 0;
+  background: none;
+  box-shadow: none;
+  border: 0;
+  color: #666666;
+  padding: 0 8px 0 10px;
+  border-left: solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+  border: 0;
+  box-shadow: none;
+  border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+  font-size: 23px;
+}
+
+.thumbnail {
+  height: 70px;
+  margin-bottom: 5px;
+}
+
+.cropArea {
+  background: #E4E4E4;
+  overflow: hidden;
+  width:500px;
+  height:350px;
+}
+
+.angular-google-map-container { height: 400px; }
+
+.rlmsSocial { padding: 10px;}
+
+.dropdown-button { width: 100%; }
+
+// Component styles are injected through gulp
+/* inject:scss */
+@import 'admin/admin';
+@import 'admin/adminlot/adminlot';
+@import 'admin/adminlotlist/adminlotlist';
+@import 'admin/adminother/adminother';
+@import 'admin/adminuser/adminuser';
+@import 'admin/adminuserlist/adminuserlist';
+@import 'admin/dashboard/dashboard';
+@import 'category/category';
+@import 'lot/lot';
+@import 'main/main';
+@import '../components/footer/footer';
+@import '../components/modal/modal';
+/* endinject */

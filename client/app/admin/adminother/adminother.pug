@@ -1,0 +1,82 @@
+.container
+  uib-tabset(active="active" type="pills")
+    uib-tab(index="0" heading="Site Content")
+      h2 Front Page Content
+      table.table.table-striped(st-safe-src='admin.content' )
+        thead
+          tr
+            th Name
+            th Short Desc
+            th Image
+            th Link
+            th Active
+            th Actions
+        tbody
+          tr(ng-repeat="row in admin.content")
+            td(ng-click="admin.showContent(row)") {{row.name}}
+            td(ng-click="admin.showContent(row)") {{row.short_desc}}
+            td(ng-click="admin.showContent(row)")
+              img.thumbnail(ng-src='{{row.image}}')
+            td(ng-click="admin.showContent(row)") {{row.link}}
+            td(ng-click="admin.showContent(row)") {{row.active }}
+            td
+              button.btn.btn-sm.btn-success(type="button" ng-show='!row.active' ng-click='admin.setActive(row, true)' uib-tooltip="Set Active")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-show='row.active' ng-click='admin.setActive(row, false)' uib-tooltip="Set Inactive")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-click="admin.removeContent(row)" confirm="Delete this content?" uib-tooltip="Delete Content")
+                i.glyphicon.glyphicon-remove-circle
+      .col-md-12(ng-show='admin.showContents')
+        form.form-horizonal
+          .col-md-6
+            .row.form-group
+              label.col-md-3 Content Name
+              .col-md-9
+                input.form-control(type='text', ng-model='admin.currContent.name')
+            .row.form-group
+              label.col-md-3 Short Desc
+              .col-md-9
+                input.form-control(type='text', ng-model='admin.currContent.short_desc')
+            .row.form-group
+              label.col-md-3 Long Desc
+              .col-md-9
+                textarea.form-control(type='text', ng-model='admin.currContent.long_desc')
+            .row.form-group
+              label.col-md-3 Link
+            .row.col-md-9
+              uib-tabset(active="active")
+                uib-tab(index="0" heading="Website")
+                  .row.form-group.col-md-offset-1
+                    .row
+                      label
+                        input(type='radio' ng-model='admin.currContent.link' value='categories')
+                        | &nbsp;Categories
+                    .row
+                      label
+                        input(type='radio' ng-model='admin.currContent.link' value='calendar')
+                        | &nbsp;Calendar
+                uib-tab(index="0" heading="Lot")
+          .col-md-6(ng-show='admin.currContent.image')
+            .row
+              label.col-md-3 Image
+            .row
+              img.col-md-10(ng-src='{{admin.currContent.image}}')
+            .row
+              button.col-md-offset-1.btn.btn-lg.btn-danger(ng-click='admin.removeImage()') Remove Image
+          .col-md-6(ng-show='!admin.currContent.image')
+            label Upload Single Photo (with cropping)
+            button.btn.btn-default(ngf-select ng-model="picFile" accept="image/*" ngf-resize="{width: 500, height: 500}") Select Photo
+            .cropArea(ngf-drop ng-model="picFile" ngf-pattern="image/*")
+              img-crop(image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="square" result-image-size="500")
+            button.btn.btn-default(ng-click="admin.uploadPhoto(croppedDataUrl, picFile.name)") Submit
+        .spacer10
+        .col-md-12
+          button.btn.btn-lg.btn-success(ng-click='admin.saveCurrContent()') Save
+          button.btn.btn-lg.btn-danger(ng-click='admin.showContents = false') Close
+      .spacer10
+      .col-md-12
+        div
+          button.btn.btn-inverse.btn-lg.btn-register(ng-click='admin.addContent()')
+            | Add Content
+    uib-tab(index="1")
+      uib-tab-heading Reports

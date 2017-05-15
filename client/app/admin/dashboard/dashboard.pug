@@ -1,0 +1,124 @@
+.container
+  uib-tabset(active="active" type="pills")
+    uib-tab(index="0" heading="Dashboard")
+      h2 Lots Awaiting Approval
+      table.table.table-striped(st-safe-src='admin.lotsapproval' )
+        thead
+          tr
+            th Lot name
+            th Description
+            th Quantity
+            th Category
+            th Close Date
+            th Actions
+        tbody
+          tr(ng-repeat="row in admin.lotsapproval")
+            td(ng-click="admin.showLot(row._id)") {{row.lot_name}}
+            td(ng-click="admin.showLot(row._id)") {{row.desc}}
+            td(ng-click="admin.showLot(row._id)") {{row.quantity}}
+            td(ng-click="admin.showLot(row._id)") {{row.category}}
+            td(ng-click="admin.showLot(row._id)") {{row.close_date | date:'MM/dd/yyyy'}}
+            td
+              button.btn.btn-sm.btn-success(type="button" ng-click='admin.openLot(row, "Approve")' uib-tooltip="Approve Lot")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-click="admin.removeLot(row, 'Approve')" confirm="Delete this lot?" uib-tooltip="Delete Lot")
+                i.glyphicon.glyphicon-remove-circle
+      h2 Lots Closing Soon
+      table.table.table-striped(st-safe-src='admin.lotsclosing' )
+        thead
+          tr
+            th Lot name
+            th Description
+            th Quantity
+            th Category
+            th Close Date
+            th Actions
+        tbody
+          tr(ng-repeat="row in admin.lotsclosing")
+            td(ng-click="admin.showLot(row._id)") {{row.lot_name}}
+            td(ng-click="admin.showLot(row._id)") {{row.desc}}
+            td(ng-click="admin.showLot(row._id)") {{row.quantity}}
+            td(ng-click="admin.showLot(row._id)") {{row.category}}
+            td(ng-click="admin.showLot(row._id)") {{row.close_date | date:'MM/dd/yyyy'}}
+            td
+              button.btn.btn-sm.btn-success(type="button" ng-click="admin.closeLot(row, 'Closing')" confirm="Close this lot?" uib-tooltip="Close Lot")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-click="admin.removeLot(row, 'Closing')" confirm="Delete this lot?" uib-tooltip="Delete Lot")
+                i.glyphicon.glyphicon-remove-circle
+      h2 Lots Recently Closed
+      table.table.table-striped(st-safe-src='admin.lotsclosed' )
+        thead
+          tr
+            th Lot name
+            th Description
+            th Quantity
+            th Category
+            th Close Date
+            th Actions
+        tbody
+          tr(ng-repeat="row in admin.lotsclosed")
+            td(ng-click="admin.showLot(row._id)") {{row.lot_name}}
+            td(ng-click="admin.showLot(row._id)") {{row.desc}}
+            td(ng-click="admin.showLot(row._id)") {{row.quantity}}
+            td(ng-click="admin.showLot(row._id)") {{row.category}}
+            td(ng-click="admin.showLot(row._id)") {{row.close_date | date:'MM/dd/yyyy'}}
+            td
+              button.btn.btn-sm.btn-success(type="button" ng-click="admin.openLot(row, 'Closed')" uib-tooltip="Re-open Lot")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-click="admin.removeLot(row, 'Closed')" confirm="Delete this lot?" uib-tooltip="Delete Lot")
+                i.glyphicon.glyphicon-remove-circle
+      h2 Users requiring approval
+      table.table.table-striped(st-safe-src='admin.usersapproval' )
+        thead
+          tr
+            th Username
+            th Full Name
+            th Seller
+            th Farm Name
+        tbody
+          tr(ng-repeat="row in admin.usersapproval")
+            td(ng-click="admin.showUser(row._id)") {{row.username}}
+            td(ng-click="admin.showUser(row._id)") {{row.fullname}}
+            td(ng-click="admin.showUser(row._id)") {{row.seller}}
+            td(ng-click="admin.showUser(row._id)") {{row.farmname}}
+            td
+              button.btn.btn-sm.btn-success(type="button" ng-click="admin.approveUser(row)" uib-tooltip="Approve User")
+                i.glyphicon.glyphicon-check
+              button.btn.btn-sm.btn-danger(type="button" ng-click="admin.removeUser(row)" confirm="Delete this user?" uib-tooltip="Delete User")
+                i.glyphicon.glyphicon-remove-circle
+    uib-tab(index="1")
+      uib-tab-heading Messages&nbsp;
+        span.badge(ng-show='admin.messageCount') {{ admin.messageCount }}
+      .spacer10
+      .col-sm-10.col-sm-offset-1
+        table.table.table-striped(st-table='admin.mymessages')
+          thead
+            tr
+              th From
+              th Subject
+              th Date
+              th Status
+              th Actions
+          tbody(ng-show="!vm.isLoading")
+            tr(ng-repeat-start="row in admin.allmessages" )
+              td(ng-click="admin.showMessage(row)") {{row.username}}
+              td(ng-click="admin.showMessage(row)") {{row.subject}}
+              td(ng-click="admin.showMessage(row)") {{row.send_date | date:'MM/dd/yyyy'}}
+              td(ng-click="admin.showMessage(row)") {{row.status}}
+              td
+                button.btn.btn-sm.btn-default(type="button" ng-click="admin.replyMessage(row)" uib-tooltip="Reply")
+                  i.glyphicon.glyphicon-arrow-left
+                button.btn.btn-sm.btn-danger(type="button" ng-click="admin.deleteMessage(row)" uib-tooltip="Delete Message" confirm="Delete this message?")
+                  i.glyphicon.glyphicon-remove-circle
+              div
+            tr(ng-if="row.expanded")
+              td(colspan="4") {{row.message}}
+            tr(ng-show="row.reply" ng-repeat-end="")
+              td(colspad="4")
+                label.col-md-2.control-label Subject: {{ row.subject }}
+                .col-md-6
+                  textarea.form-control(type='text' ng-model="admin.messageText")
+                button.btn.btn-primary(ng-click="admin.sendReply(row)") Send Message
+          tfoot
+            tr
+              td.text-center(st-pagination='' st-items-by-page='20' colspan='5')

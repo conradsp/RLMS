@@ -1,0 +1,60 @@
+.carouselimg {
+  float:left;
+  margin-left:15%;
+}
+
+.carouseltext {
+  float:right;
+  margin-right:20%;
+  margin-top:20px;
+}
+
+.carouseldiv {
+  height: 325px;
+  max-height: 325px;
+}
+
+.box-frame {
+  z-index: 30;
+  width: 180px;
+  height: 167px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -4000px;
+}
+
+.more {
+  z-index: 50;
+  position: relative;
+  margin-left: 2px;
+  width: 136px;
+  height: 27px;
+  display: block;
+}
+
+#banner {
+  border-bottom: none;
+  margin-top: -20px;
+}
+
+#banner h1 {
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.hero-unit {
+  position: relative;
+  padding: 30px 15px;
+  color: #F5F5F5;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background: #4393B9;
+}
+
+.navbar-text {
+  margin-left: 15px;
+}

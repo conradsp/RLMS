@@ -1,0 +1,49 @@
+.container
+  h1 View Lots by Type
+  .row
+    .col-md-6.col-md-offset-6
+      #custom-search-input
+        .input-group.col-md-12
+          input.form-control.input-sm(type="text" placeholder="Search..." ng-model="lotlist.searchCriteria")
+          span.input-group-btn
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-remove(ng-show="lotlist.searchCriteria" ng-click="lotlist.clearSearch()")
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-search(ng-click="lotlist.lotSearch(true)")
+  .col-md-12
+    .form-group.col-md-6
+      label.col-md-3.control-label Lot Type:
+      .col-md-9
+        div.btn-group.dropdown-button(uib-dropdown dropdown-append-to-body)
+          button#dropLotType.btn.btn-default(type="button" uib-dropdown-toggle) {{lotlist.currType}}
+            span.caret
+          ul.dropdown-menu(uib-dropdown-menu)
+            li(ng-repeat="lottype in lotlist.lotTypes")
+              a(href="#" ng-click="lotlist.setLotType(lottype)") {{lottype}}
+  .col-md-12
+    h1 {{ lotlist.currType }} Lots
+    table.table.table-striped(st-table='lotlist.displayedLots' st-safe-src="lotlist.lots")
+      thead
+        tr
+          th(st-sort="lot_name" title="Sort by name") Lot name
+          th(st-sort="desc" title="Sort by description") Description
+          th Quantity
+          th(st-sort="livestock_type" title="Sort by livestock type") Type
+          th(st-sort="category" title="Sort by category") Category
+          th(st-sort="seller" title="Sort by seller") Seller
+          th(st-sort="close_date" title="Sort by close date") Close Date
+          th Status
+      tbody(ng-show="!lotlist.isLoading")
+        tr(ng-repeat="row in lotlist.displayedLots")
+          td(ng-click="lotlist.showLot(row._id)") {{row.lot_name}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.desc}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.quantity}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.livestock_type}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.category}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.seller}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.close_date | date:'MM/dd/yyyy'}}
+          td(ng-click="lotlist.showLot(row._id)") {{row.status}}
+      tfoot
+        tr
+          td.text-center(st-pagination='' st-items-by-page='20' colspan='7')
+

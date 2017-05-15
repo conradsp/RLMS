@@ -1,0 +1,159 @@
+.container
+  .col-md-12
+    h1 {{adminuser.user.username}}
+    form.form(name='form', ng-submit='adminuser.saveUser(form)', novalidate='')
+      .col-md-6
+        .row.form-group
+          label.col-md-3 Username
+          .col-md-9
+            input.form-control(type='text', name='username', ng-model='adminuser.user.username', ng-readonly="!adminuser.isNew", required='', mongoose-error='')
+            p.help-block(ng-show='form.username.$error.mongoose')
+              | {{ adminuser.errors.username }}
+        .row.form-group
+          label.col-md-3 Full Name
+          .col-md-9
+            input.form-control(type='text', name='fullname', ng-model='adminuser.user.fullname', ng-readonly="!adminuser.isNew", required='')
+        .row.form-group
+          label.col-md-3 Email
+          .col-md-9
+            input.form-control(type='email', name='email', ng-model='adminuser.user.email', ng-readonly="!adminuser.isNew", required='', mongoose-error='')
+            p.help-block(ng-show='form.email.$error.mongoose')
+              | {{ adminuser.errors.email }}
+        .row.form-group
+          label.col-md-3 Phone Number
+          .col-md-9
+            input.form-control(type='text', name='phonenumber', ng-model='adminuser.user.phonenumber')
+        .row.form-group
+          label.col-md-3 ID Number
+          .col-md-9
+            input.form-control(type='text', name='idnumber', ng-model='adminuser.user.idnumber')
+        .row.form-group
+          label.col-md-3 Passport Number
+          .col-md-9
+            input.form-control(type='text', name='passportnumber', ng-model='adminuser.user.passportnumber')
+        .row.form-group
+          label.col-md-3 SMS Number
+          .col-md-9
+            input.form-control(type='text', name='smsnumber', ng-model='adminuser.user.smsnumber')
+        .row.form-group
+          label.col-md-3 Tag Number
+          .col-md-9
+            input.form-control(type='text', name='tagnumber', ng-model='adminuser.user.tagnumber')
+        .row.form-group
+          label.col-md-3 Budget
+          div.col-md-9.dropdown(uib-dropdown)
+            button#dropBudget.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{adminuser.user.budget || '3000-5000' }}
+              | &nbsp;
+              span.caret
+            ul.dropdown-menu(uib-dropdown-menu)
+              li(ng-repeat="budget in adminuser.budget")
+                a(href="#" ng-click="adminuser.setBudget(budget)") {{budget}}
+        .row.form-group
+          label.col-md-3 Status
+          div.col-md-9.dropdown(uib-dropdown)
+            button#dropStatus.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{adminuser.user.status }}
+              | &nbsp;
+              span.caret
+            ul.dropdown-menu(uib-dropdown-menu)
+              li(ng-repeat="status in adminuser.status")
+                a(href="#" ng-click="adminuser.setStatus(status)") {{status}}
+        .row.form-group
+          label.col-md-3 Role
+          div.col-md-9.dropdown(uib-dropdown)
+            button#dropRole.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{adminuser.user.role }}
+              | &nbsp;
+              span.caret
+            ul.dropdown-menu(uib-dropdown-menu)
+              li(ng-repeat="role in adminuser.roles")
+                a(href="#" ng-click="adminuser.setRole(role)") {{role}}
+      .col-md-6
+        .row.form-group
+          label.col-md-3 Farm Name
+          .col-md-9
+            input.form-control(type='text', name='farmname', ng-model='adminuser.user.farmname')
+        .row.form-group
+          label.col-md-3 Trading Name
+          .col-md-9
+            input.form-control(type='text', name='tradingname', ng-model='adminuser.user.tradingname')
+        .row.form-group
+          label.col-md-3 Billing Address
+          .col-md-9
+            input.form-control(type='text', name='billingaddress', ng-model='adminuser.user.billingaddress')
+        .row.form-group
+          label.col-md-3 Farm Address
+          .col-md-9
+            input.form-control(type='text', name='farmaddress', ng-model='adminuser.user.farmaddress')
+        .row.form-group
+          label.col-md-3 District
+          .col-md-9
+            input.form-control(type='text', name='district', ng-model='adminuser.user.district')
+        .row.form-group
+          label.col-md-3 Province
+          .col-md-9
+            input.form-control(type='text', name='province', ng-model='adminuser.user.province')
+        .row.form-group
+          label.col-md-3 Brand
+          div.col-md-9.dropdown(uib-dropdown)
+            button#dropLotType.btn.btn-default.dropdown-toggle.col-md-5(type="button" uib-dropdown-toggle) {{adminuser.user.brand || 'Yes' }}
+              | &nbsp;
+              span.caret
+            ul.dropdown-menu(uib-dropdown-menu)
+              li
+                a(href="#" ng-click="adminuser.setBrand(true)") Yes
+              li
+                a(href="#" ng-click="adminuser.setBrand(false)") No
+        .row.form-group
+          label.col-md-3 Brand Description
+          .col-md-9
+            textarea.form-control(name='branddesc', ng-model='adminuser.user.branddesc')
+        .row.form-group
+          label.col-md-3 Bank Name
+          .col-md-9
+            input.form-control(type='text', name='bankname', ng-model='adminuser.user.bankname')
+        .row.form-group
+          label.col-md-3 Bank Info
+          .col-md-9
+            input.form-control(type='text', name='bankinfo', ng-model='adminuser.user.bankinfo')
+        .row.form-group
+          label.col-md-3 Transport Info
+          .col-md-9
+            textarea.form-control(name='transportinfo', ng-model='adminuser.user.transportinfo')
+        .col-md-12
+          // Do checkboxes for type and class
+          .row.form-group
+            label.col-md-3 Livestock Type
+            .col-md-9
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-checked='adminuser.user.livestocktype.cattle', ng-model='adminuser.user.livestocktype.cattle')
+                | Cattle
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestocktype.sheep')
+                | Sheep
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestocktype.goats')
+                | Goats
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestocktype.pigs')
+                | Pigs
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestocktype.wildlife')
+                | Wildlife
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestocktype.machinery')
+                | Machinery
+          .row.form-group
+            label.col-md-3 Livestock Class
+            .col-md-9
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestockclass.breeding')
+                | Breeding
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestockclass.feeding')
+                | Feeding
+              label.checkbox-inline
+                input(type='checkbox', name='typecattle', ng-model='adminuser.user.livestockclass.slaughter')
+                | Slaughter
+          .row
+            p.help-block  {{ adminuser.message }}
+      .col-md-12
+        button.btn.btn-primary(type='submit') Save User

@@ -1,0 +1,44 @@
+.container
+  .row
+    .col-md-6.col-md-offset-6
+      #custom-search-input
+        .input-group.col-md-12
+          input.form-control.input-sm(type="text" placeholder="Search..." ng-model="userlist.searchCriteria")
+          span.input-group-btn
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-remove(ng-show="userlist.searchCriteria" ng-click="userlist.clearSearch()")
+            button.btn.btn-info.btn-sm
+              i.glyphicon.glyphicon-search(ng-click="userlist.userSearch()")
+  .col-md-12
+    h1 Users
+    table.table.table-striped(st-table='userlist.displayedUsers' st-safe-src='userlist.users')
+      thead
+        tr
+          th(st-sort="username" title="Sort by username") Username
+          th(st-sort="fullname" title="Sort by full name") Full Name
+          th(st-sort="district" title="Sort by district") District
+          th(st-sort="province" title="Sort by province") Province
+          th(st-sort="status" title="Sort by status") Status
+          th Actions
+      tbody(ng-show="!userlist.isLoading")
+        tr(ng-repeat="row in userlist.displayedUsers")
+          td(ng-click="userlist.showUser(row._id)") {{row.username}}
+          td(ng-click="userlist.showUser(row._id)") {{row.fullname}}
+          td(ng-click="userlist.showUser(row._id)") {{row.district}}
+          td(ng-click="userlist.showUser(row._id)") {{row.province}}
+          td(ng-click="userlist.showUser(row._id)") {{row.status}}
+          td
+            button.btn.btn-sm.btn-success(type="button" ng-show="row.status=='New'" ng-click='userlist.setStatus(row, "Approved")' uib-tooltip="Approve User")
+              i.glyphicon.glyphicon-check
+            button.btn.btn-sm.btn-danger(type="button" ng-show="row.status=='Approved'" ng-click='userlist.setStatus(row, "Closed")' uib-tooltip="Close User")
+              i.glyphicon.glyphicon-check
+            button.btn.btn-sm.btn-danger(type="button" ng-click="userlist.removeUser(row)" confirm="Delete this user?" uib-tooltip="Delete User")
+              i.glyphicon.glyphicon-remove-circle
+      tfoot
+        tr
+          td.text-center(st-pagination='' st-items-by-page='20' colspan='7')
+
+  .col-md-12
+    div
+      button.btn.btn-inverse.btn-lg.btn-register(ng-click='userlist.addUser()')
+        | Add User

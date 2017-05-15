@@ -1,0 +1,301 @@
+.container
+  .col-md-12
+    h1 {{adminlot.full_lot_name}}
+    label.col-md-12.control-label(ng-show='!adminlot.isNew') Current Bid: {{adminlot.lot.current_bid | currency}}
+    button.col-md-offset-1.btn.btn-primary(ng-click="adminlot.clickBid()") Show Bids
+    button.col-md-offset-1.btn.btn-primary(ng-click="adminlot.clickWatch()") Show Watchers
+    .col-md-8(ng-show="adminlot.showBidForm")
+      table.table.table-striped.col-md-offset-2(st-table='adminlot.lot.bids')
+        thead
+          tr
+            th(st-sort="user_name" title="Sort by name") Bidder
+            th(st-sort="bid_amount" title="Sort by description") Amount
+            th(st-sort="bid_date" title="Sort by close date") Date
+        tbody
+          tr(ng-repeat="row in adminlot.lot.bids")
+            td {{row.user_name}}
+            td {{row.bid_amount | currency}}
+            td {{row.bid_date | date:'MM/dd/yyyy'}}
+      button.btn.btn-primary.col-md-offset-2(ng-click="adminlot.showBidMessageForm=true") Email Bidders
+      .spacer10
+      .form-group.col-md-offset-2.col-md-9(ng-show="adminlot.showBidMessageForm")
+        label.col-md-2.control-label Subject: {{ adminlot.lot.lot_name }}
+        .col-md-7
+          textarea.form-control(type='text' ng-model="adminlot.bidMessageText")
+        button.btn.btn-primary(ng-click="adminlot.messageBidders()") Send Message
+    .col-md-8(ng-show="adminlot.showWatchForm")
+      table.table.table-striped.col-md-offset-2(st-table='adminlot.lot.watching')
+        thead
+          tr
+            th(st-sort="user_name" title="Sort by name") Watcher
+        tbody
+          tr(ng-repeat="row in adminlot.lot.watching")
+            td {{row.user_name}}
+      button.btn.btn-primary.col-md-offset-2(ng-click="adminlot.showWatchMessageForm=true") Email Watchers
+      .spacer10
+      .form-group.col-md-offset-2.col-md-9(ng-show="adminlot.showWatchMessageForm")
+        label.col-md-2.control-label Subject: {{ adminlot.lot.lot_name }}
+        .col-md-7
+          textarea.form-control(type='text' ng-model="adminlot.watchMessageText")
+        button.btn.btn-primary(ng-click="adminlot.messageWatchers()") Send Message
+    .spacer10
+    form#lotForm.form-horizonal
+      input#lot_id(type='hidden' ng-value="_id")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Agent:
+          .col-md-9
+            input#agent.form-control(type='text' ng-model="adminlot.lot.agent" ng-required ng-readonly='true')
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Seller:
+          .col-md-9
+            input#seller_id.form-control(type='text' ng-model="adminlot.lot.seller")
+        .form-group.col-md-6
+          label.col-md-3.control-label District:
+          .col-md-9
+            input#district.form-control(type='text' ng-model="adminlot.lot.district" ng-required)
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Lot Name:
+          .col-md-9
+            input#lot_name.form-control(type='text' ng-model="adminlot.lot.lot_name" ng-required)
+        .form-group.col-md-6
+          label.col-md-3.control-label Lot Type:
+          .col-md-9
+            div.dropdown(uib-dropdown)
+              button#dropLotType.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{adminlot.lot.lot_type}}
+                span.caret
+              ul.dropdown-menu(uib-dropdown-menu)
+                li(ng-repeat="lottype in adminlot.lottypes")
+                  a(href="#" ng-click="adminlot.setLotType(lottype)") {{lottype}}
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Quantity:
+          .col-md-9
+            input#quantity.form-control(type='text' ng-model="adminlot.lot.quantity" ng-required)
+        .form-group.col-md-6
+          label.col-md-3.control-label Category:
+          .col-md-9
+            div.dropdown(uib-dropdown)
+              button#dropCategory.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{adminlot.lot.category}}
+                span.caret
+              ul.dropdown-menu(uib-dropdown-menu)
+                li(ng-repeat="category in adminlot.categories")
+                  a(href="#" ng-click="adminlot.setCategory(category)") {{category}}
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Description:
+          .col-md-9
+            textarea.form-control#description(ng-model="adminlot.lot.desc" ng-required)
+        .form-group.col-md-6
+          label.col-md-3.control-label.col-md-3 Livestock Type:
+          .col-md-9
+            div.dropdown(uib-dropdown)
+              button#livestockType.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{adminlot.lot.livestock_type}}
+                span.caret
+              ul.dropdown-menu(uib-dropdown-menu)
+                li(ng-repeat="lstype in adminlot.livestock_types")
+                  a(href="#" ng-click="adminlot.setLivestockType(lstype)") {{lstype}}
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Marking:
+          .col-md-9
+            input#marking.form-control(type='text' ng-model="adminlot.lot.marking" ng-required)
+        .form-group.col-md-6
+          label.col-md-3.control-label Avg Weight:
+          .col-md-9
+            input#avg_weight.form-control(type='text' ng-model="adminlot.lot.avg_weight")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Paint Mark:
+          .col-md-9
+            input#paint_mark.form-control(type='text' ng-model="adminlot.lot.paint_mark" ng-required)
+        .form-group.col-md-6
+          label.col-md-3.control-label Top Weight:
+          .col-md-9
+            input#top_weight.form-control(type='text' ng-model="adminlot.lot.top_weight")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Status:
+          .col-md-9
+            div.dropdown(uib-dropdown)
+              button#lotStatus.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{adminlot.lot.status}}
+                span.caret
+              ul.dropdown-menu(uib-dropdown-menu)
+                li(ng-repeat="status in adminlot.statuses")
+                  a(href="#" ng-click="adminlot.setStatus(status)") {{status}}
+        .form-group.col-md-6
+          label.col-md-3.control-label Bottom Weight:
+          .col-md-9
+            input#bottom_weight.form-control(type='text' ng-model="adminlot.lot.bottom_weight")
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Payment Info:
+          .col-md-9
+            textarea#payment_info.form-control(rows='5' ng-model="adminlot.lot.payment_info" ng-required)
+        .form-group.col-md-6
+          label.col-md-12.control-label  Teeth
+          .row
+            label.col-md-2.col-md-offset-1 MT
+            input(type='number' ng-model='adminlot.lot.teeth.mt')
+          .row
+            label.col-md-2.col-md-offset-1 2T
+            input(type='number' ng-model='adminlot.lot.teeth.twot')
+          .row
+            label.col-md-2.col-md-offset-1 4T
+            input(type='number' ng-model='adminlot.lot.teeth.fourt')
+          .row
+            label.col-md-2.col-md-offset-1 6T
+            input(type='number' ng-model='adminlot.lot.teeth.sixt')
+          .row
+            label.col-md-2.col-md-offset-1 FM
+            input(type='number' ng-model='adminlot.lot.teeth.fm')
+      .row
+        .form-group.col-md-6
+          label.col-md-3.control-label Close Date:
+          .col-md-9
+            p.input-group
+              input.form-control(type='text' uib-datepicker-popup="{{adminlot.format}}" ng-model="adminlot.lot.close_date" is-open="adminlot.closedate.opened" datepicker-options="adminlot.dateOptions" close-text="Close")
+              span.input-group-btn
+                button.btn.btn-default(type="button" ng-click="adminlot.setCloseDate()")
+                  i.glyphicon.glyphicon-calendar
+        .form-group.col-md-6
+          label.col-md-3.control-label Pricing Unit:
+          .col-md-9
+            div.dropdown(uib-dropdown)
+              button#pricingUnit.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{adminlot.lot.pricing_unit}}
+                span.caret
+              ul.dropdown-menu(uib-dropdown-menu)
+                li(ng-repeat="pricing in adminlot.pricing_units")
+                  a(href="#" ng-click="adminlot.setPricingUnit(pricing)") {{pricing}}
+      .row
+        h2 Photos of this lot
+        ul.col-md-4(ng-repeat="photo in adminlot.lot.photos")
+          img.img-responsive(ng-src="{{photo.filename}}")
+          button.btn.btn-primary(ng-click="adminlot.removePhoto(photo)") Remove
+
+      .row
+        h2 Upload new photos for lot
+        .col-md-6
+          div Upload Single Photo (with cropping)
+          button.btn.btn-default(ngf-select ng-model="picFile" accept="image/*" ngf-resize="{width: 500, height: 500}") Select Photo
+          .cropArea(ngf-drop ng-model="picFile" ngf-pattern="image/*")
+            img-crop(image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="square" result-image-size="500")
+          button.btn.btn-default(ng-click="adminlot.uploadPhoto(croppedDataUrl, picFile.name)") Submit
+
+          span.progress(ng-show="progress >= 0")
+            div(style="width:{{progress}}%" ng-bind="progress + '%'")
+          span(ng-show="result") Upload Successful
+          span.err(ng-show="errorMsg") {{errorMsg}}
+        .col-md-6
+          div Upload multiple photos
+          button.btn.btn-default(ngf-select="adminlot.uploadMultiple($files, $invalidFiles)" multiple accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ngf-resize="{width: 500, height: 500}") Select Files
+          br
+          div Files:
+          ul
+            li(ng-repeat="f in files" style="font:smaller") {{f.name}} {{f.$errorParam}}
+              span.progress(ng-show="f.progress >= 0")
+              div(style="width:{{f.progress}}%" ng-bind="f.progress + '%'")
+            li(ng-repeat="f in errFiles" style="font:smaller") {{f.name}} {{f.$error}} {{f.$errorParam}}
+          div {{errorMsg}}
+
+      .col-md-12
+        .col-md-12
+          h2 Animals in this lot
+        .col-md-12
+          button.btn.btn-primary(ng-click="adminlot.newAnimal()") Add new animal
+        .spacer10
+        .row
+          .col-md-12
+            ul.col-sm-4(ng-repeat="animal in adminlot.lot.animals" ng-show="adminlot.lot.animals")
+              .panel.panel-primary
+                .panel-heading
+                  h3.panel-title Tag Number {{animal.tag_number}}
+                .panel-body
+                  .form-horizontal
+                    .form-group
+                      label.col-md-5.control-label Tag Number:
+                      .col-md-7
+                        input#tagNumber.form-control.input-sm(type='text' ng-model="animal.tag_number")
+                    .form-group
+                      label.col-md-5.control-label Class:
+                      .col-md-7
+                        div.dropdown(uib-dropdown)
+                          button#animalClass.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{animal.class}}
+                            span.caret
+                          ul.dropdown-menu(uib-dropdown-menu)
+                            li(ng-repeat="class in adminlot.classes")
+                              a(href="#" ng-click="adminlot.setClass(animal, class)") {{class}}
+                      label.col-md-5.control-label Age class:
+                      .col-md-7
+                        div.dropdown(uib-dropdown)
+                          button#ageClass.btn.btn-default.dropdown-toggle(type="button" uib-dropdown-toggle) {{animal.age_class}}
+                            span.caret
+                          ul.dropdown-menu(uib-dropdown-menu)
+                            li(ng-repeat="age_class in adminlot.age_classes")
+                              a(href="#" ng-click="adminlot.setAgeClass(animal, age_class)") {{age_class}}
+                    .form-group
+                      label.col-md-5.control-label Breed:
+                      .col-md-7
+                        input#breed.form-control.input-sm(type='text' ng-model="animal.breed")
+                    .form-group
+                      label.col-md-5.control-label Weight:
+                      .col-md-7
+                        input#weight.form-control.input-sm(type='text' ng-model="animal.weight")
+                    .form-group
+                      label.col-md-5.control-label Age (teeth):
+                      .col-md-7
+                        input#ageTeeth.form-control.input-sm(type='text' ng-model="animal.age_teeth")
+                    .form-group
+                      label.col-md-5.control-label Age (months):
+                      .col-md-7
+                        input#ageMonths.form-control.input-sm(type='text' ng-model="animal.age_months")
+                    .form-group
+                      label.col-md-5.control-label Grade:
+                      .col-md-7
+                        input#grade.form-control.input-sm(type='text' ng-model="animal.grade")
+                    .form-group
+                      label.col-md-5.control-label Min lactation:
+                      .col-md-7
+                        input#minLactation.form-control.input-sm(type='text' ng-model="animal.min_lactation")
+                    .form-group
+                      label.col-md-5.control-label Max lactation:
+                      .col-md-7
+                        input#maxLactation.form-control.input-sm(type='text' ng-model="animal.max_lactation")
+                    .form-group
+                      label.col-md-5.control-label # of calves:
+                      .col-md-7
+                        input#numCalves.form-control.input-sm(type='text' ng-model="animal.num_calves")
+                    .form-group
+                      label.col-md-5.control-label Male calves:
+                      .col-md-7
+                        input#maleCalf.form-control.input-sm(type='text' ng-model="animal.male_calf")
+                    .form-group
+                      label.col-md-5.control-label Female calves:
+                      .col-md-7
+                        input#femaleCalf.form-control.input-sm(type='text' ng-model="animal.female_calf")
+                    .form-group
+                      label.col-md-5.control-label Dress %:
+                      .col-md-7
+                        input#dressPct.form-control.input-sm(type='text' ng-model="animal.dress_pct")
+                    .form-group
+                      label.col-md-5.control-label Quantity:
+                      .col-md-7
+                        input#animalQuantity.form-control.input-sm(type='text' ng-model="animal.quantity")
+                    .form-group(ng-show='animal.photo')
+                      .col-md-4
+                        label.control-label Photo:
+                        button.btn.btn-primary(ng-click="adminlot.removeAnimalPhoto(animal)") Remove
+                      .col-md-8
+                        img.img-responsive.imgPlaceholder(ng-src="{{animal.photo}}")
+                    .form-group(ng-show='!animal.photo')
+                      label Upload Single Photo (with cropping)
+                      button.btn.btn-default(ngf-select ng-model="picFile" accept="image/*" ngf-resize="{width: 500, height: 500}") Select Photo
+                      .cropArea(ngf-drop ng-model="picFile" ngf-pattern="image/*")
+                        img-crop(image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="square" result-image-size="500")
+                      button.btn.btn-default(ng-click="adminlot.addAnimalPhoto(croppedDataUrl, picFile.name, animal)") Submit
+                  button.btn.btn-primary(ng-click="adminlot.removeAnimal(animal.tag_number)") Remove this animal
+  .col-md-12.form-group
+    button.btn.btn-primary(ng-click="adminlot.saveLot()") Save Lot
+
