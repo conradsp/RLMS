@@ -53,6 +53,9 @@ export class AdminotherComponent {
           this.NotifyService.setData("Saved", "Content saved");
           this.NotifyService.open("success");
         }
+      }).catch(err => {
+        this.NotifyService.setData("Error", "Could not save this content page. Please try again.");
+        this.NotifyService.open("error");
       });
       this.showContents = false;
     } else {
@@ -63,6 +66,9 @@ export class AdminotherComponent {
           this.NotifyService.setData("Saved", "Content saved");
           this.NotifyService.open("success");
         }
+      }).catch(err => {
+        this.NotifyService.setData("Error", "Could not update this content page. Please try again.");
+        this.NotifyService.open("error");
       });
     }
   }
@@ -72,10 +78,16 @@ export class AdminotherComponent {
       if (response.status == 200) {
         this.NotifyService.setData("Saved", "Content removed");
         this.NotifyService.open("success");
-
+      } else {
+        this.NotifyService.setData("Error", "Could not delete this content page. Please try again.");
+        this.NotifyService.open("error");
       }
+    }).catch(err => {
+      this.NotifyService.setData("Error", "Could not delete this content page. Please try again.");
+      this.NotifyService.open("error");
     });
 
+    // Reload the contents
     this.$http.get('/api/contents').then(response => {
       this.content = response.data;
     });
@@ -94,9 +106,11 @@ export class AdminotherComponent {
           var photo = { filename: null };
           photo.filename = response.data;
           that.currContent.image = photo.filename;
-          //console.log(that.lot.photos);
         }
       });
+    }).catch(err => {
+      this.NotifyService.setData("Error", "Error uploading photo. Please try again.");
+      this.NotifyService.open("error");
     });
   }
 }

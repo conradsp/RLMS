@@ -50,10 +50,8 @@ export class AdminlotlistComponent {
         }
       });
     } else {
-      var params = {
-        status : this.currStatus
-      };
-      this.$http.put('/api/lots', params).then(response => {
+      
+      this.$http.get('/api/lots?status='+this.currStatus).then(response => {
         that.lots = response.data;
         that.lotCount = response.data.length;
 
@@ -81,25 +79,21 @@ export class AdminlotlistComponent {
 
   lotSearch()
   {
-    var that=this;
-    var params = {
-      search : this.searchCriteria
-    };
 
-    this.$http.put('/api/lots', params).then(response => {
-      that.lotCount = response.data.length;
-      that.lots = response.data;
+    this.$http.get('/api/lots?search='+ this.searchCriteria).then(response => {
+      this.lotCount = response.data.length;
+      this.lots = response.data;
 
       var number = this.tableState.pagination.number;
-      if (that.lotCount < number)
+      if (this.lotCount < number)
         number = this.lotCount;
 
-      that.isLoading = false;
-      that.displayedLots = [];
+      this.isLoading = false;
+      this.displayedLots = [];
       for (var i=0; i<number; i++)
-        that.displayedLots.push(that.lots[that.tableState.pagination.start+i]);
+        this.displayedLots.push(this.lots[this.tableState.pagination.start+i]);
 
-      that.tableState.pagination.numberOfPages = Math.ceil(that.lotCount/that.tableState.pagination.number);//set the number of pages so the pagination ca
+      this.tableState.pagination.numberOfPages = Math.ceil(this.lotCount/this.tableState.pagination.number);//set the number of pages so the pagination ca
     });
   }
 

@@ -6,7 +6,7 @@ var controller = require('./lot.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.put('/', controller.sortedIndex);
+
 router.get('/id/:id', controller.show);
 router.post('/', controller.create);
 router.post('/status/:id', controller.changestatus);

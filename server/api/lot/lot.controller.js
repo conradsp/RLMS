@@ -83,39 +83,23 @@ function handleError(res, statusCode) {
 // Gets a list of Lots
 export function index(req, res) {
   var query = {};
-  if (req.body.onlyOpen != null) {
+  console.log(req.query);
+  if (req.query.onlyOpen != null) {
     var criteria = "status";
     query[criteria] = "Open";
   }
-  return Lot.find(query).select('lot_name seller desc quantity close_date category livestock_type photos current_bid status district avg_weight top_weight bottom_weight').sort('-close_date').exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-export function sortedIndex(req, res) {
-  var query = {};
-  if (req.body.onlyOpen != null) {
-    var criteria = "status";
-    query[criteria] = "Open";
-  }
-  /*if (req.body.search != null){
-   var searchString = req.body.search;
-   var dbSearch = "$or";
-   query[dbSearch] = "[{'lot_name':{'$regex':"+searchString+", '$options':'i'}},{'desc':{'$regex':"+searchString+", '$options':'i'}},{'seller':{'$regex':"+searchString+", '$options':'i'}},{'category':{'$regex':"+searchString+", '$options':'i'}},{'livestock_type':{'$regex':"+searchString+", '$options':'i'}}]";
-
-   }*/
-  if (req.body.livestockType != null) {
+  if (req.query.livestockType != null) {
     var livestock = "livestock_type";
-    query[livestock] = req.body.livestockType;
+    query[livestock] = req.query.livestockType;
   }
 
-  if (req.body.status != null) {
+  if (req.query.status != null) {
     var selectStatus = "status";
-    query[selectStatus] = req.body.status;
+    query[selectStatus] = req.query.status;
   }
 
-  if (req.body.search != null) {
-    var searchString = req.body.search;
+  if (req.query.search != null) {
+    var searchString = req.query.search;
     return Lot.find(query).find({'$or':[
       {'lot_name':{'$regex':searchString, '$options':'i'}},
       {'desc':{'$regex':searchString, '$options':'i'}},

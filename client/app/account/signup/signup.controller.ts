@@ -25,7 +25,6 @@ export default class SignupController {
 
   constructor(Auth, User, $state, NotifyService, $http) {
     'ngInject';
-    var that=this;
     this.Auth = Auth;
     this.$state = $state;
     this.$http = $http;
@@ -33,12 +32,9 @@ export default class SignupController {
     if ($state.params.status == 'view') {
       this.isView = true;
       $http.get('/api/users/'+User._id).then(response => {
-        //console.log(response.data);
-        that.user = response.data;
+        this.user = response.data;
       });
-    }
-    else if($state.params.status == 'update')
-    {
+    } else if($state.params.status == 'update') {
       this.isMe = true;
       this.user = Auth.getCurrentUserSync();
     }
@@ -61,7 +57,6 @@ export default class SignupController {
       }
       form.$valid = true;
     }
-
 
     // Validation is done before register is called
     if (form.$valid) {

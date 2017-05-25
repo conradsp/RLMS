@@ -29,9 +29,8 @@ import routing from './main.routes';
         socket.unsyncUpdates('lot');
       });
 
-      var params = {
-        status : "Open"
-      };
+      var params = '?status=Open';
+        
       this.loadLots(params).then(result => {
         this.lots = result;
         this.socket.syncUpdates('lot', this.lots);
@@ -45,9 +44,7 @@ import routing from './main.routes';
 
     lotSearch()
     {
-      var params = {
-        search : this.searchCriteria
-      };
+      var params = '?search='+this.searchCriteria;
 
       this.loadLots(params).then(result => {
         this.lots = result;
@@ -58,10 +55,8 @@ import routing from './main.routes';
 
     clearSearch()
     {
-      this.searchCriteria = null;
-      var params = {
-        search : this.searchCriteria
-      };
+      var params='';
+
       this.loadLots(params).then(result => {
         this.lots = result;
       });
@@ -70,8 +65,8 @@ import routing from './main.routes';
     loadLots(params, callback?: Function)
     {
       var deferredLots = this.$q.defer();
-      var currLots = {};
-      this.$http.put('/api/lots', params).then(response => {
+      var currLots;
+      this.$http.get('/api/lots'+ params).then(response => {
         if (response.data.length <= 9) {
           currLots = response.data;
         } else {

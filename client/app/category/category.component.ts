@@ -1,6 +1,5 @@
 'use strict';
 const angular = require('angular');
-
 const uiRouter = require('angular-ui-router');
 
 import routes from './category.routes';
@@ -39,14 +38,14 @@ export class CategoryComponent {
 
   // isSearch=true means we are searching from the search bar.  False means we are doing a search by livestockType
   lotSearch(isSearch) {
-    var params = { onlyOpen : 'true', livestockType: null, search: null };
+    var searchParams = '?';
     if (this.currType != "All")
-      params.livestockType = this.currType;
+      searchParams+='livestockType='+this.currType+'&';
     if (isSearch) {
-      params.search = this.searchCriteria;
+      searchParams+='&search='+this.searchCriteria;
     }
 
-    this.$http.put('/api/lots', params).then(response => {
+    this.$http.get('/api/lots'+ searchParams).then(response => {
       this.lotCount = response.data.length;
       this.lots = response.data;
 

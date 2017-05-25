@@ -8,15 +8,13 @@ export default class SettingsController {
   currentUser;
   user;
   message;
-  lotsbidding;
-  lotswatching;
-  mymessages;
   messageCount = 0;
   totalMessages = 0;
   budget;
   LotService;
   $location;
   $http;
+  $q;
   isLoading = false;
   tableState = null;
   showMessageForm = false;
@@ -25,7 +23,6 @@ export default class SettingsController {
 
   constructor(Auth, $http, $q, LotService, $location, NotifyService) {
     'ngInject';
-    var that = this;
     this.errors = {};
     this.submitted = false;
     this.LotService = LotService;
@@ -40,16 +37,13 @@ export default class SettingsController {
     if (Auth.isLoggedIn()) {
       this.currentUser = Auth.getCurrentUserSync();
       this.loadUser(this.currentUser._id).then(result => {
-        that.user = result;
-        that.lotsbidding = that.user.bids;
-        that.lotswatching = that.user.watching;
-        that.mymessages = that.user.messages;
-        that.user.messages.forEach(function(message) {
+        this.user = result;
+        this.user.messages.forEach(function(message) {
           message.reply=false;
           if (message.status == "New")
-            that.messageCount++;
+            this.messageCount++;
         });
-      that.totalMessages = that.user.messages.length;
+      this.totalMessages = this.user.messages.length;
       });
     }
 
@@ -143,6 +137,9 @@ export default class SettingsController {
       this.NotifyService.setData("Sent", "Message sent");
       this.NotifyService.open("success");
       row.reply = false;
+    }).catch(err => {
+      this.NotifyService.setData("Error", "There was a problem sending your message. Please try again.");
+      this.NotifyService.open("error");
     });
 
 
@@ -153,7 +150,7 @@ export default class SettingsController {
       if (response.status == 200) {
         this.$http.delete('/api/lots/' + row.lot_id + '/watch/'+ this.currentUser._id).then(response => {
           if (response.status == 200) {
-            this.lotswatching = this.lotswatching.filter(function (el) {
+            this.user.watching = this.user.watching.filter(function (el) {
               return el.lot_id != row.lot_id;
             });
           }
@@ -167,11 +164,16 @@ export default class SettingsController {
       this.messageCount--;
     this.$http.delete('/api/users/'+this.currentUser._id+'/message/'+ row._id).then(response => {
       if (response.status == 200) {
-        this.mymessages = this.mymessages.filter(function(el) {
+        this.user.messages = this.user.messages.filter(function(el) {
           return el._id != row._id;
         });
-
+      } else {
+        this.NotifyService.setData("Sorry", "We are unable to delete this message.");
+        this.NotifyService.open("error");
       }
+    }).catch(err => {
+      this.NotifyService.setData("Sorry", "We are unable to delete this message.");
+        this.NotifyService.open("error");
     });
   }
 
@@ -201,7 +203,10 @@ export default class SettingsController {
 
       this.NotifyService.setData("Sent", "Message sent");
       this.NotifyService.open("success");
-    });
+    }).catch(err => {
+      this.NotifyService.setData("Error", "There was a problem sending your message. Please try again.");
+      this.NotifyService.open("error");
+    });;
 
 
   }

@@ -5,12 +5,16 @@
 var proxyquire = require('proxyquire').noPreserveCache();
 
 var lotCtrlStub = {
+  create: 'lotCtrl.create',
+  getBids: 'lotCtrl.getBids',
+  update: 'lotCtrl.update',
+  destroy: 'lotCtrl.destroy',
+  lotsApproval: 'lotCtrl.lotsApproval',
+  lotsClosing: 'lotCtrl.lotsClosing',
+  lotsClosed: 'lotCtrl.lotsClosed',
   index: 'lotCtrl.index',
   show: 'lotCtrl.show',
-  create: 'lotCtrl.create',
-  upsert: 'lotCtrl.upsert',
-  update: 'lotCtrl.update',
-  destroy: 'lotCtrl.destroy'
+  changestatus: 'lotCtrl.changestatus'
 };
 
 var routerStub = {
@@ -21,15 +25,6 @@ var routerStub = {
   delete: sinon.spy()
 };
 
-var authServiceStub = {
-  isAuthenticated() {
-    return 'authService.isAuthenticated';
-  },
-  hasRole(role) {
-    return `authService.hasRole.${role}`;
-  }
-};
-
 // require the index with our stubbed out modules
 var lotIndex = proxyquire('./index.js', {
   express: {
@@ -37,8 +32,7 @@ var lotIndex = proxyquire('./index.js', {
       return routerStub;
     }
   },
-  './lot.controller': lotCtrlStub,
-  '../../auth/auth.service': authServiceStub
+  './lot.controller': lotCtrlStub
 });
 
 
@@ -55,10 +49,50 @@ describe('Lot API Router:', function() {
     });
   });
 
+  describe('GET /api/lots/approval', function() {
+    it('should route to lot.controller.lotsApproval', function() {
+      expect(routerStub.get
+        .withArgs('/approval', 'lotCtrl.lotsApproval')
+        ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/lots/closing', function() {
+    it('should route to lot.controller.lotsClosing', function() {
+      expect(routerStub.get
+        .withArgs('/closing', 'lotCtrl.lotsClosing')
+        ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/lots/closed', function() {
+    it('should route to lot.controller.lotsClosed', function() {
+      expect(routerStub.get
+        .withArgs('/closed', 'lotCtrl.lotsClosed')
+        ).to.have.been.calledOnce;
+    });
+  });
+
   describe('GET /api/lots/id/:id', function() {
     it('should route to lot.controller.show', function() {
       expect(routerStub.get
-        .withArgs('/:id', 'lotCtrl.show')
+        .withArgs('/id/:id', 'lotCtrl.show')
+        ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/lots/:id/bid', function() {
+    it('should route to lot.controller.getBids', function() {
+      expect(routerStub.get
+        .withArgs('/:id/bid', 'lotCtrl.getBids')
+        ).to.have.been.calledOnce;
+    });
+  });
+
+  describe('GET /api/lots/status/:id', function() {
+    it('should route to lot.controller.changestatus', function() {
+      expect(routerStub.post
+        .withArgs('/status/:id', 'lotCtrl.changestatus')
         ).to.have.been.calledOnce;
     });
   });
@@ -66,7 +100,7 @@ describe('Lot API Router:', function() {
   describe('POST /api/lots', function() {
     it('should route to lot.controller.create', function() {
       expect(routerStub.post
-        .withArgs('/', 'authService.hasRole.admin', 'lotCtrl.create')
+        .withArgs('/', 'lotCtrl.create')
         ).to.have.been.calledOnce;
     });
   });
@@ -74,7 +108,7 @@ describe('Lot API Router:', function() {
   describe('PUT /api/lots/:id', function() {
     it('should route to lot.controller.update', function() {
       expect(routerStub.put
-        .withArgs('/:id', 'authService.hasRole.admin', 'lotCtrl.update')
+        .withArgs('/:id', 'lotCtrl.update')
         ).to.have.been.calledOnce;
     });
   });
@@ -82,15 +116,15 @@ describe('Lot API Router:', function() {
   describe('PATCH /api/lots/:id', function() {
     it('should route to lot.controller.update', function() {
       expect(routerStub.patch
-        .withArgs('/:id', 'authService.hasRole.admin', 'lotCtrl.update')
+        .withArgs('/:id', 'lotCtrl.update')
         ).to.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/lots/:id', function() {
+  describe('DELETE /api/lots/id/:id', function() {
     it('should route to lot.controller.destroy', function() {
       expect(routerStub.delete
-        .withArgs('/:id', 'authService.hasRole.admin', 'lotCtrl.destroy')
+        .withArgs('/id/:id', 'lotCtrl.destroy')
         ).to.have.been.calledOnce;
     });
   });

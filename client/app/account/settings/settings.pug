@@ -5,14 +5,14 @@
         uib-tab(index="0" heading="My Bids")
           .spacer10
           .col-sm-10.col-sm-offset-1
-            table.table.table-striped(st-safe-src='vm.lotsbidding' )
+            table.table.table-striped(st-safe-src='vm.user.bids' )
               thead
                 tr
                   th Lot name
                   th Bid Amount
                   th Close Date
               tbody
-                tr(ng-repeat="row in vm.lotsbidding")
+                tr(ng-repeat="row in vm.user.bids")
                   td(ng-click="vm.showLot(row.lot_id)") {{row.lot_name}}
                   td(ng-click="vm.showLot(row.lot_id)") {{row.bid_amount | currency}}
                   td(ng-click="vm.showLot(row.lot_id)") {{row.close_date | date:'MM/dd/yyyy'}}
@@ -20,14 +20,14 @@
         uib-tab(index="1" heading="Watching")
           .spacer10
           .col-sm-10.col-sm-offset-1
-            table.table.table-striped(st-safe-src='vm.lotswatching' )
+            table.table.table-striped(st-safe-src='vm.user.watching' )
               thead
                 tr
                   th Lot name
                   th Close Date
                   th Actions
               tbody
-                tr(ng-repeat="row in vm.lotswatching")
+                tr(ng-repeat="row in vm.user.watching")
                   td(ng-click="vm.showLot(row.lot_id)") {{row.lot_name}}
                   td(ng-click="vm.showLot(row.lot_id)") {{row.close_date | date:'MM/dd/yyyy'}}
                   td
@@ -38,7 +38,7 @@
             span.badge(ng-show='vm.messageCount') {{ vm.messageCount }}
           .spacer10
           .col-sm-10.col-sm-offset-1
-            table.table.table-striped(st-table='vm.mymessages')
+            table.table.table-striped(st-table='vm.user.messages')
               thead
                 tr
                   th From
@@ -47,7 +47,7 @@
                   th Status
                   th Actions
               tbody(ng-show="!vm.isLoading")
-                tr(ng-repeat-start="row in vm.mymessages" )
+                tr(ng-repeat-start="row in vm.user.messages" )
                   td(ng-click="vm.showMessage(row)") {{row.username}}
                   td(ng-click="vm.showMessage(row)") {{row.subject}}
                   td(ng-click="vm.showMessage(row)") {{row.send_date | date:'MM/dd/yyyy'}}
