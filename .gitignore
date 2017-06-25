@@ -7,5 +7,9 @@ client/bower_components
 client/index.html
 dist
 /server/config/local.env.js
+/server/config/nodemailer.js
+/server/config/local.env.sample.js
+/server/config/environment/index.js
+/server/config/seed.js
 npm-debug.log
 coverage

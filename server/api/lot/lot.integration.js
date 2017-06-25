@@ -35,8 +35,9 @@ describe('Lot API:', function() {
       request(app)
         .post('/api/lots')
         .send({
-          name: 'New Lot',
-          info: 'This is the brand new lot!!!'
+          lot_name: 'New Lot',
+          desc: 'This is the brand new lot!!!',
+          status: 'Waiting'
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -50,17 +51,18 @@ describe('Lot API:', function() {
     });
 
     it('should respond with the newly created lot', function() {
-      expect(newLot.name).to.equal('New Lot');
-      expect(newLot.info).to.equal('This is the brand new lot!!!');
+      expect(newLot.lot_name).to.equal('New Lot');
+      expect(newLot.desc).to.equal('This is the brand new lot!!!');
+      expect(newLot.status).to.equal('Waiting');
     });
   });
 
-  describe('GET /api/lots/:id', function() {
+  describe('GET /api/lots/id/:id', function() {
     var lot;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/lots/${newLot._id}`)
+        .get(`/api/lots/id/${newLot._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -77,8 +79,8 @@ describe('Lot API:', function() {
     });
 
     it('should respond with the requested lot', function() {
-      expect(lot.name).to.equal('New Lot');
-      expect(lot.info).to.equal('This is the brand new lot!!!');
+      expect(lot.lot_name).to.equal('New Lot');
+      expect(lot.desc).to.equal('This is the brand new lot!!!');
     });
   });
 
@@ -89,8 +91,8 @@ describe('Lot API:', function() {
       request(app)
         .put(`/api/lots/${newLot._id}`)
         .send({
-          name: 'Updated Lot',
-          info: 'This is the updated lot!!!'
+          lot_name: 'Updated Lot',
+          desc: 'This is the updated lot!!!'
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -108,13 +110,13 @@ describe('Lot API:', function() {
     });
 
     it('should respond with the updated lot', function() {
-      expect(updatedLot.name).to.equal('Updated Lot');
-      expect(updatedLot.info).to.equal('This is the updated lot!!!');
+      expect(updatedLot.lot_name).to.equal('Updated Lot');
+      expect(updatedLot.desc).to.equal('This is the updated lot!!!');
     });
 
     it('should respond with the updated lot on a subsequent GET', function(done) {
       request(app)
-        .get(`/api/lots/${newLot._id}`)
+        .get(`/api/lots/id/${newLot._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -123,24 +125,23 @@ describe('Lot API:', function() {
           }
           let lot = res.body;
 
-          expect(lot.name).to.equal('Updated Lot');
-          expect(lot.info).to.equal('This is the updated lot!!!');
+          expect(lot.lot_name).to.equal('Updated Lot');
+          expect(lot.desc).to.equal('This is the updated lot!!!');
 
           done();
         });
     });
   });
 
-  describe('PATCH /api/lots/:id', function() {
+  describe('POST /api/lots/status/:id', function() {
     var patchedLot;
 
     beforeEach(function(done) {
       request(app)
-        .patch(`/api/lots/${newLot._id}`)
-        .send([
-          { op: 'replace', path: '/name', value: 'Patched Lot' },
-          { op: 'replace', path: '/info', value: 'This is the patched lot!!!' }
-        ])
+        .post(`/api/lots/status/${newLot._id}`)
+        .send({
+          status: 'Open'
+        })
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
@@ -157,15 +158,14 @@ describe('Lot API:', function() {
     });
 
     it('should respond with the patched lot', function() {
-      expect(patchedLot.name).to.equal('Patched Lot');
-      expect(patchedLot.info).to.equal('This is the patched lot!!!');
+      expect(patchedLot.status).to.equal('Open');
     });
   });
 
   describe('DELETE /api/lots/:id', function() {
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete(`/api/lots/${newLot._id}`)
+        .delete(`/api/lots/id/${newLot._id}`)
         .expect(204)
         .end(err => {
           if(err) {
@@ -177,7 +177,7 @@ describe('Lot API:', function() {
 
     it('should respond with 404 when lot does not exist', function(done) {
       request(app)
-        .delete(`/api/lots/${newLot._id}`)
+        .delete(`/api/lots/id/${newLot._id}`)
         .expect(404)
         .end(err => {
           if(err) {

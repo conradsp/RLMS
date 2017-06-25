@@ -6,7 +6,8 @@ import {MainController} from './main.component';
 describe('Component: MainComponent', function() {
 
   beforeEach(angular.mock.module(main));
-  beforeEach(angular.mock.module('stateMock'));  beforeEach(angular.mock.module('socketMock'));
+  beforeEach(angular.mock.module('stateMock'));  
+  beforeEach(angular.mock.module('socketMock'));
 
   var scope;
   var mainComponent;

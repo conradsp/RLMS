@@ -13,8 +13,9 @@ describe('User API:', function() {
   before(function() {
     return User.remove().then(function() {
       user = new User({
-        name: 'Fake User',
+        username: 'test@example.com',
         email: 'test@example.com',
+        fullname: 'Test User',
         password: 'password'
       });
 
@@ -34,7 +35,7 @@ describe('User API:', function() {
       request(app)
         .post('/auth/local')
         .send({
-          email: 'test@example.com',
+          username: 'test@example.com',
           password: 'password'
         })
         .expect(200)

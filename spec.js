@@ -3,6 +3,7 @@
 var testsContext;
 
 require('babel-polyfill');
+require('phantomjs-polyfill-object-assign')
 require('angular');
 require('angular-mocks');
 require('./client/components/ui-router/ui-router.mock');
